@@ -1,0 +1,135 @@
+.TH PKRAM 1 "2026-09-01" "pkram 1.0.0" "User Commands"
+.SH NAME
+pkram \- track Papierkram work time from the terminal
+.SH SYNOPSIS
+.B pkram
+.I subcommand
+.RI [ options ]
+.SH DESCRIPTION
+.B pkram
+lists projects and tasks, creates and deletes time entries, and runs a local
+timer against the Papierkram API, without opening the web interface.
+.PP
+It is an unofficial third-party tool and is not affiliated with, endorsed by,
+or supported by the makers of Papierkram.
+.SH SUBCOMMANDS
+.TP
+.B auth set-token [\-\-stdin]
+Store the API token in the macOS Keychain. Prompts with terminal echo disabled,
+or reads from standard input with \fB\-\-stdin\fR.
+.TP
+.B auth status
+Report whether a token is stored, and for which subdomain. Never prints the token.
+.TP
+.B auth check
+Verify that the stored token authenticates against the API.
+.TP
+.B auth delete [\-\-force]
+Remove the stored token from the Keychain.
+.TP
+.B projects list [\-\-all] [\-\-company \fIid\fR]
+List projects.
+.TP
+.B tasks list [\-\-project \fIid\fR]
+List tasks, optionally limited to one project.
+.TP
+.B entries list [\-\-from \fIdate\fR] [\-\-to \fIdate\fR] [\-\-project \fIid\fR] [\-\-task \fIname\fR|\fIid\fR]
+List time entries. Dates accept \fBYYYY-MM-DD\fR, \fBtoday\fR, \fByesterday\fR or
+\fBtomorrow\fR. Unlike the writing subcommands, this does \fInot\fR inherit
+\fBtask_id\fR from \fB.pkram\fR: a listing narrowed to a single task cannot be
+told apart from a day with nothing booked.
+.TP
+.B entries add \-\-start \fIHH:MM\fR \-\-end \fIHH:MM\fR [\-\-date \fIdate\fR] [\-\-task \fIname\fR|\fIid\fR] [\-\-comment \fItext\fR] [\-\-unbillable] [\-\-force]
+Create a time entry. Without \fB\-\-force\fR it resolves customer, project and
+task and asks for confirmation first.
+.TP
+.B entries delete \fIid\fR [\-\-force]
+Delete a time entry.
+.TP
+.B timer start [\-\-task \fIname\fR|\fIid\fR] [\-\-comment \fItext\fR]
+Start a local timer. The timer lives on this machine until it is stopped.
+.TP
+.B timer status
+Show the running timer.
+.TP
+.B timer stop [\-\-dry\-run] [\-\-force]
+Stop the timer and submit it as a time entry.
+.TP
+.B timer cancel [\-\-force]
+Discard the running timer without writing anything.
+.TP
+.B config show
+Print the effective configuration and where it came from.
+.TP
+.B config set \fIkey\fR \fIvalue\fR
+Set \fBsubdomain\fR or \fBdefault-user-id\fR in the user configuration.
+.SH CONFIGURATION
+.B pkram
+reads an optional
+.B .pkram
+file from the current directory, and from parent directories up to the
+enclosing git root. Example:
+.PP
+.RS
+.nf
+{
+  "subdomain": "your-subdomain",
+  "company_id": 1,
+  "project_id": 2,
+  "task_id": 3,
+  "tasks": { "tickets": 4, "maintenance": 3 },
+  "user_id": 1
+}
+.fi
+.RE
+.PP
+.B task_id
+is the default for
+.B entries add
+and
+.BR "timer start" .
+Tasks listed under
+.B tasks
+can be addressed by name wherever a task is expected, so
+.B \-\-task tickets
+is equivalent to
+.BR "\-\-task 4" .
+.PP
+Precedence, highest first:
+.PP
+.RS
+command-line flag, \fBPAPIERKRAM_*\fR environment, \fB.pkram\fR, user config
+.RE
+.PP
+There is no built-in default subdomain. Without one,
+.B pkram
+refuses to run rather than address somebody else's tenant.
+.SH FILES
+.TP
+.B ~/.config/pkram/config.json
+User configuration. Honours \fBXDG_CONFIG_HOME\fR.
+.TP
+.B ~/.local/state/pkram/timer.json
+The running local timer. Honours \fBXDG_STATE_HOME\fR.
+.TP
+.B ./.pkram
+Per-project configuration.
+.SH ENVIRONMENT
+.TP
+.B PAPIERKRAM_SUBDOMAIN, PAPIERKRAM_USER_ID, PAPIERKRAM_COMPANY_ID, PAPIERKRAM_PROJECT_ID, PAPIERKRAM_TASK_ID
+Override the corresponding configuration values.
+.TP
+.B NO_COLOR
+Disable ANSI colours.
+.SH SECURITY
+The API token is kept in the macOS Keychain under service
+.BR papierkram-api-key ,
+with the subdomain as the account. It is never written to disk by
+.BR pkram .
+.SH EXIT STATUS
+.B pkram
+exits 0 on success and non-zero on error.
+.SH AUTHOR
+Written by Vanille Media.
+.SH REPORTING BUGS
+https://github.com/mickeyl/pkram/issues
