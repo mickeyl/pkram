@@ -34,26 +34,36 @@ Der Fokus liegt auf einem schnellen Alltagsfluss:
 
 ## Installation
 
-Voraussetzungen:
+### Homebrew
 
-- macOS
-- Swift 6 / Xcode Command Line Tools
-- Papierkram-API-Key
+```sh
+brew tap mickeyl/formulae
+brew install pkram
+```
 
-Bauen und testen:
+Die Formel baut aus den Quellen und installiert `pkram`, den Kurz-Alias `pk` und die
+Manpage `pkram(1)`.
+
+### Aus den Quellen
+
+Voraussetzungen: macOS und Swift 6 (Xcode Command Line Tools).
+
+```sh
+git clone https://github.com/mickeyl/pkram.git
+cd pkram
+make install
+```
+
+Das installiert `pkram` nach `~/.local/bin/pkram`, legt `pk` als Symlink daneben und
+installiert die Manpage nach `~/.local/share/man/man1`. Zum Bauen und Testen ohne zu
+installieren:
 
 ```sh
 make build
 make test
 ```
 
-Installieren:
-
-```sh
-make install
-```
-
-Das installiert `pkram` nach `~/.local/bin/pkram` und legt `pk` als kurzen Symlink-Alias an.
+Danach brauchst du noch einen Papierkram-API-Key, siehe unten.
 
 ## Authentifizierung
 
