@@ -1,6 +1,17 @@
-# pkram
+<p align="center">
+  <img src="Assets/pkram-logo.png" alt="" width="160">
+</p>
 
-[![CI](https://github.com/mickeyl/pkram/actions/workflows/ci.yml/badge.svg)](https://github.com/mickeyl/pkram/actions/workflows/ci.yml)
+<h1 align="center">pkram</h1>
+
+<p align="center">
+  Arbeitszeiten in Papierkram erfassen, ohne die Weboberfläche zu öffnen.
+</p>
+
+<p align="center">
+  <a href="https://github.com/mickeyl/pkram/actions/workflows/ci.yml"><img src="https://github.com/mickeyl/pkram/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT"></a>
+</p>
 
 `pkram` erfasst Arbeitszeiten in Papierkram ohne Weboberfläche: Projekte, Aufgaben, Zeiteinträge und ein lokaler Timer, alles von der Kommandozeile. Die Logik steckt in einer eigenständigen Bibliothek `PapierkramCore`, damit später eine leichtgewichtige macOS-Menubar-App dieselbe Basis nutzen kann.
 
